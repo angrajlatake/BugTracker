@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
 import NewTaskModal from "../Modal/NewTaskModal";
 
-import { Outlet, useOutletContext, useParams } from "react-router-dom";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { AuthContext } from "../../context/AuthContext";
 
+import { Outlet, useOutletContext } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 import { ProjectContext } from "../../context/ProjectContext";
 import { TasksContext } from "../../context/TaskContext";
 import { getTasksByProject, getAllTasks } from "../../api";
@@ -22,7 +22,6 @@ export default function Tasks() {
   useEffect(() => {
     handleTabs(1);
   }, []);
-  const params = useParams();
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -37,7 +36,7 @@ export default function Tasks() {
       }
     };
     fetchTasks();
-  }, []);
+  }, [selectedProject, tasks, dispatch]);
 
   return (
     <>

@@ -1,24 +1,19 @@
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { Outlet } from "react-router-dom";
+
 import Navbar from "../components/Navbar";
 import Rightbar from "../components/Rightbar";
 import Sidebar from "../components/Sidebar";
-
-import { motion } from "framer-motion";
-import { useState, useContext } from "react";
-
-import { Box, Paper, Typography } from "@mui/material";
-
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import theme from "../Styles/theme";
-import { Outlet } from "react-router-dom";
-
-import { AuthContext } from "../context/AuthContext";
 
 const Home = () => {
   const [value, setValue] = useState(0);
   const handleChange = (newValue) => {
     setValue(newValue);
   };
-
-  const { user } = useContext(AuthContext);
 
   return (
     <>

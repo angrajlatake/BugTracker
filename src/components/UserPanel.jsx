@@ -1,14 +1,16 @@
+import { useContext, useEffect } from "react";
+import { Link } from "react-router-dom";
+
+import TaskCard from "./Tasks/TaskCard";
+
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../context/AuthContext";
 import Typography from "@mui/material/Typography";
-
 import DoubleArrowRoundedIcon from "@mui/icons-material/DoubleArrowRounded";
-import { TasksContext } from "../context/TaskContext";
-import TaskCard from "./Tasks/TaskCard";
-import { Link } from "react-router-dom";
+
 import { getTasksByUser } from "../api";
+import { AuthContext } from "../context/AuthContext";
+import { TasksContext } from "../context/TaskContext";
 
 const UserPanel = () => {
   const { user } = useContext(AuthContext);
@@ -20,7 +22,7 @@ const UserPanel = () => {
       dispatch({ type: "FETCH_TASKS", payload: res.data });
     };
     fetchTasksByUser();
-  }, []);
+  }, [user._id, dispatch]);
 
   const filteredTasks =
     tasks && tasks.filter((task) => task.status === "progress");

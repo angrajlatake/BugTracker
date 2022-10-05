@@ -18,7 +18,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import { AuthContext } from "../context/AuthContext";
 
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
@@ -45,7 +44,7 @@ const Login = () => {
     password: "",
   });
 
-  const { user, loading, error, dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));

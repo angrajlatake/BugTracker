@@ -1,5 +1,4 @@
 import { useState, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
 
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
@@ -15,8 +14,8 @@ const TasksTabs = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const { user } = useContext(AuthContext);
-  const { tasks, dispatch } = useContext(TasksContext);
+
+  const { tasks } = useContext(TasksContext);
 
   return (
     <>
