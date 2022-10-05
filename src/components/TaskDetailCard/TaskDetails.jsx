@@ -3,13 +3,13 @@ import { Box, Button } from "@mui/material";
 import TaskDetailCard from "./TaskDetailCard";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import LinearProgress from "@mui/material/LinearProgress";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useFetch from "../../hooks/useFetch";
 
 const TaskDetails = () => {
   const taskId = useParams();
   const navigate = useNavigate();
-  const { data, loading, error, reFetch } = useFetch(`task/${taskId.id}`);
+  const { data, loading, reFetch } = useFetch(`task/${taskId.id}`);
 
   return (
     <>

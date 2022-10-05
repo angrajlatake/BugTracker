@@ -1,7 +1,7 @@
-import { useContext, useRef, useState } from "react";
-import { styled, useTheme } from "@mui/material/styles";
-import { Link, useNavigate } from "react-router-dom";
-import { Drawer, Box, Toolbar, Slide, Tabs, Tab } from "@mui/material";
+import { useContext, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+import { Drawer, Box, Toolbar } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -16,10 +16,7 @@ import { AuthContext } from "../context/AuthContext";
 
 const drawerWidth = 240;
 
-const Sidebar = ({ handleChange, value }) => {
-  const theme = useTheme();
-  const [open, setOpen] = useState(true);
-
+const Sidebar = ({ value }) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   return (

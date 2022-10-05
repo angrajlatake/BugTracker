@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import Modal from "@mui/material/Modal";
 
 import TextField from "@mui/material/TextField";
-import { Box, Button, InputLabel } from "@mui/material";
+import { Box, Button } from "@mui/material";
 
 import { AuthContext } from "../../context/AuthContext";
 import { updateUser } from "../../api";

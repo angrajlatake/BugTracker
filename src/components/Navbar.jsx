@@ -1,6 +1,6 @@
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { TaskContext, TasksContext } from "../context/TaskContext";
+import { TasksContext } from "../context/TaskContext";
 import {
   Box,
   AppBar,
@@ -12,19 +12,17 @@ import {
   Menu,
   MenuItem,
   Tooltip,
-  Badge,
   Paper,
   InputBase,
 } from "@mui/material";
 import AddSharpIcon from "@mui/icons-material/AddSharp";
-import MenuIcon from "@mui/icons-material/Menu";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+
 import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ProjectContext } from "../context/ProjectContext";
 import StyledSwitch from "./Switch";
-import theme from "../Styles/theme";
+
 import { ThemeContext } from "../context/ThemeContext";
 import SearchList from "./SearchList";
 
@@ -36,12 +34,9 @@ const Navbar = () => {
   const { tasks } = useContext(TasksContext);
   const { dispatch: projectDispatch } = useContext(ProjectContext);
 
-  const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const [query, setQuery] = useState("");
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };

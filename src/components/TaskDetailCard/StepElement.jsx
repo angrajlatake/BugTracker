@@ -1,12 +1,11 @@
-import { useMemo, useState } from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
-import ReviewsIcon from "@mui/icons-material/Reviews";
+
 import PropTypes from "prop-types";
-import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
+
 import { styled } from "@mui/material/styles";
-import { StepConnector, StepContent, Typography } from "@mui/material";
+import { StepConnector, Typography } from "@mui/material";
 import { stepConnectorClasses } from "@mui/material/StepConnector";
 
 const StepElement = ({ startDate, targetDate }) => {
@@ -79,7 +78,7 @@ const StepElement = ({ startDate, targetDate }) => {
   }));
 
   function QontoStepIcon(props) {
-    const { active, completed, className } = props;
+    const { active, className } = props;
 
     return (
       <QontoStepIconRoot ownerState={{ active }} className={className}>

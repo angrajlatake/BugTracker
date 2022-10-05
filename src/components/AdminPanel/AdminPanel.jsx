@@ -1,22 +1,21 @@
 import React, { useContext, useEffect } from "react";
+
+import UnAssignedList from "./UnAssignedList";
+import { BasicTable } from "./BasicTable";
+
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-
 import theme from "../../Styles/theme";
-
-import { BasicTable } from "./BasicTable";
 
 import { ProjectContext } from "../../context/ProjectContext";
 import { TasksContext } from "../../context/TaskContext";
-import { useNavigate } from "react-router-dom";
 import { getAllTasks, getTasksByProject } from "../../api";
-import UnAssignedList from "./UnAssignedList";
 
 const AdminPanel = () => {
-  const { projects, selectedProject, dispatch } = useContext(ProjectContext);
+  const { projects, selectedProject } = useContext(ProjectContext);
   const { tasks, dispatch: taskDispatch } = useContext(TasksContext);
 
   useEffect(() => {
@@ -30,8 +29,8 @@ const AdminPanel = () => {
       }
     };
     fetchTasks();
-  }, [selectedProject]);
-  const navigate = useNavigate();
+  }, [selectedProject, taskDispatch]);
+
   const unassignedTasks =
     tasks && tasks.filter((task) => task.assignedTo === null);
   const overdueTasks =

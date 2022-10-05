@@ -13,12 +13,9 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import CircularProgress from "@mui/material/CircularProgress";
 
-import useFetch from "../hooks/useFetch";
-import SnackError from "./SnackBar/SnackError";
 import NewProjectModal from "./Modal/NewProjectModal";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ProjectContext } from "../context/ProjectContext";
 import { setSelectedProject } from "../actions/projects";
 import { getProjects } from "../api/index";
@@ -69,7 +66,6 @@ export default function ProjectDrawer() {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const { projects, selectedProject, dispatch } = useContext(ProjectContext);
-  const params = useParams();
 
   useEffect(() => {
     const fetchProjects = async () => {

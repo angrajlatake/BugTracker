@@ -12,7 +12,7 @@ import ImageCropper from "./ImageCropper";
 import { AuthContext } from "../../context/AuthContext";
 import axios from "axios";
 import { dataURLtoFile } from "../../utils/dataURLtoFile";
-import { useLocation, useNavigate } from "react-router-dom";
+
 const Fade = React.forwardRef(function Fade(props, ref) {
   const { in: open, children, onEnter, onExited, ...other } = props;
   const style = useSpring({

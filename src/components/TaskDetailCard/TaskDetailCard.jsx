@@ -22,7 +22,7 @@ import { getUser } from "../../api";
 
 const TaskDetailCard = ({ task, reFetch }) => {
   const { user } = useContext(AuthContext);
-  const { tasks, dispatch } = useContext(TasksContext);
+  const { dispatch } = useContext(TasksContext);
 
   const chipColor = (status) => {
     switch (status) {

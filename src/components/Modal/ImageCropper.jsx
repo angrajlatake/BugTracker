@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Backdrop from "@mui/material/Backdrop";
 import Box from "@mui/material/Box";
@@ -75,7 +75,7 @@ const ImageCropper = ({
     setCroppedArea(croppedAreaPixels);
   };
 
-  const handleCompleteBtn = useCallback(async () => {
+  const handleCompleteBtn = async () => {
     try {
       const croppedImage = await getCroppedImg(image, croppedArea, 0);
       setCroppedImage(croppedImage);
@@ -84,7 +84,7 @@ const ImageCropper = ({
     } catch (e) {
       console.error(e);
     }
-  }, [croppedArea]);
+  };
   const handleClose = () => setOpenCropper(false);
   return (
     <Modal
