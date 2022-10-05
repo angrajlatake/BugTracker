@@ -18,10 +18,13 @@ import add from "date-fns/add";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import SnackError from "../SnackError";
+import SnackError from "../SnackBar/SnackError";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const NewTaskModal = ({ openModal, setOpenModal }) => {
+  const params = useParams();
+
   const { data, error } = useFetch(`user`);
   const [formData, setFormData] = useState({
     title: null,
@@ -50,7 +53,7 @@ const NewTaskModal = ({ openModal, setOpenModal }) => {
     setPostLoading(true);
     try {
       const res = axios.post(
-        `${process.env.REACT_APP_API_URL}/projects`,
+        `${process.env.REACT_APP_API_URL}/task/${params.id}`,
         formData,
         {
           withCredentials: true,

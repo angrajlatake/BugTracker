@@ -34,7 +34,7 @@ export default function TaskCard({ title, desc, status }) {
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="body" color="initial">
+          <Typography variant="subtitle1" color="initial">
             {title}
           </Typography>
           <Chip label={status} color={chipColor(status)} variant="outlined" />

@@ -62,7 +62,13 @@ const Sidebar = ({ handleChange, value }) => {
                   disablePadding
                   selected={index === value}
                   onClick={() => {
-                    navigate(`${item.title.toLowerCase()}`);
+                    navigate(
+                      `${
+                        item.title === "Settings"
+                          ? "/settings"
+                          : item.title.toLowerCase()
+                      }`
+                    );
                   }}
                 >
                   <ListItemButton

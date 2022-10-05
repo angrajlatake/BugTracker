@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, useReducer, useEffect, useCallback } from "react";
 
 const INITIAL_STATE = {
   user: JSON.parse(localStorage.getItem("user")) || null,
@@ -34,6 +34,8 @@ const AuthReducer = (state, action) => {
         loading: true,
         error: null,
       };
+    case "UPDATE_USER":
+      return { ...state, user: { ...state.user, ...action.payload } };
 
     default:
       return state;

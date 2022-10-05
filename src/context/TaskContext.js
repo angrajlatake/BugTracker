@@ -1,11 +1,24 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useReducer, useEffect, useCallback } from "react";
 
-export const TasksContext = createContext();
+const INITIAL_STATE = {
+  tasks: null,
+};
+
+export const TasksContext = createContext(INITIAL_STATE);
+
+const TasksReducer = (state, action) => {
+  switch (action.type) {
+    case "FETCH_TASKS":
+      return { tasks: action.payload };
+    default:
+      return state;
+  }
+};
 
 export const TasksContextProvider = ({ children }) => {
-  const [tasks, setTasks] = useState(null);
+  const [state, dispatch] = useReducer(TasksReducer, INITIAL_STATE);
   return (
-    <TasksContext.Provider value={[tasks, setTasks]}>
+    <TasksContext.Provider value={{ tasks: state.tasks, dispatch }}>
       {children}
     </TasksContext.Provider>
   );

@@ -1,36 +1,40 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import Modal from "@mui/material/Modal";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import FormControl from "@mui/material/FormControl";
-import Grid from "@mui/material/Grid";
-import Checkbox from "@mui/material/Checkbox";
 import Button from "@mui/material/Button";
-import Link from "@mui/material/Link";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import MailRoundedIcon from "@mui/icons-material/MailRounded";
 import KeyRoundedIcon from "@mui/icons-material/KeyRounded";
-
-import InputLabel from "@mui/material/InputLabel";
 import Switch from "@mui/material/Switch";
-import StyledSwitch from "./Switch";
 import theme from "../Styles/theme";
-import BootstrapInput from "./BootstrapInput";
-import { useOutletContext } from "react-router-dom";
+
+import { useNavigate, useOutletContext } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import EditUserModal from "./Modal/EditUserModal";
+import ProfileModal from "./Modal/ProfileModal";
 
 const Settings = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const handleTabs = useOutletContext();
 
+  const [openProfile, setOpenProfile] = useState(false);
+
+  const handleOpenProfileModal = () => setOpenProfile(true);
+
+  const handleTabs = useOutletContext();
+  const { user, dispatch } = useContext(AuthContext);
   useEffect(() => {
     handleTabs(2);
   }, []);
+
+  const handleLogout = () => {
+    dispatch({ type: "LOGOUT" });
+    navigate("/login");
+  };
   return (
     <>
       <Typography variant="h4" color="initial">
@@ -42,6 +46,7 @@ const Settings = () => {
           variant="contained"
           color="error"
           sx={{ mt: 3, mb: 2 }}
+          onClick={handleLogout}
         >
           Logout
         </Button>
@@ -68,7 +73,7 @@ const Settings = () => {
                   Name
                 </Typography>
                 <Typography variant="h6" color="initial">
-                  Rami Sharp
+                  {user.name}
                 </Typography>
               </Box>
             </Box>
@@ -88,7 +93,7 @@ const Settings = () => {
                   Email
                 </Typography>
                 <Typography variant="h6" color="initial">
-                  test@test.com
+                  {user.email}
                 </Typography>
               </Box>
             </Box>
@@ -116,9 +121,16 @@ const Settings = () => {
                 </Typography>
               </Box>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Button type="submit" variant="contained" onClick={handleOpen}>
                 Edit
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                onClick={handleOpenProfileModal}
+              >
+                Profile
               </Button>
             </Box>
           </Stack>
@@ -192,50 +204,8 @@ const Settings = () => {
           </Stack>
         </Card>
       </Stack>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box
-          component="form"
-          noValidate
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            borderRadius: 1,
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <FormControl variant="standard" fullWidth sx={{ width: "100%" }}>
-            <InputLabel shrink htmlFor="bootstrap-input">
-              Name
-            </InputLabel>
-            <BootstrapInput defaultValue="Remi Sharp" id="bootstrap-input" />
-          </FormControl>
-          <FormControl variant="standard" fullWidth sx={{ width: "100%" }}>
-            <InputLabel shrink htmlFor="bootstrap-input">
-              Email
-            </InputLabel>
-            <BootstrapInput defaultValue="test@test.com" id="bootstrap-input" />
-          </FormControl>
-          <FormControl variant="standard" fullWidth sx={{ width: "100%" }}>
-            <InputLabel shrink htmlFor="bootstrap-input">
-              Password
-            </InputLabel>
-            <BootstrapInput defaultValue="•••••••" id="bootstrap-input" />
-          </FormControl>
-          <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-            Save
-          </Button>
-        </Box>
-      </Modal>
+      <EditUserModal open={open} setOpen={setOpen} />
+      <ProfileModal openModal={openProfile} setOpenModal={setOpenProfile} />
     </>
   );
 };

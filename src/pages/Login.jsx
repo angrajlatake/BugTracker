@@ -1,17 +1,19 @@
 import { useContext, useState } from "react";
-
+import { login } from "../api";
 import { motion } from "framer-motion";
-import BootstrapInput from "../components/BootstrapInput";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
+
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import Stack from "@mui/material/Stack";
+import Tooltip from "@mui/material/Tooltip";
+
 // import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { AuthContext } from "../context/AuthContext";
@@ -30,7 +32,7 @@ function Copyright(props) {
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Tasky
-      </Link>{" "}
+      </Link>
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -39,8 +41,8 @@ function Copyright(props) {
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
-    username: undefined,
-    password: undefined,
+    username: "",
+    password: "",
   });
 
   const { user, loading, error, dispatch } = useContext(AuthContext);
@@ -55,19 +57,25 @@ const Login = () => {
     e.preventDefault();
     dispatch({ type: "LOGIN_START" });
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/login`,
-        credentials,
-        {
-          withCredentials: true,
-          credentials: "include",
-        }
-      );
+      const res = await login(credentials);
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
       navigate("/");
     } catch (err) {
       dispatch({ type: "LOGIN_FAILED", payload: err.response.data });
     }
+  };
+
+  const AdminSignIn = () => {
+    setCredentials({
+      username: "kioan5",
+      password: "testpass",
+    });
+  };
+  const UserSignIn = () => {
+    setCredentials({
+      username: "mlejeune0",
+      password: "testpass",
+    });
   };
 
   return (
@@ -119,6 +127,7 @@ const Login = () => {
                 label="Username"
                 name="username"
                 autoComplete="username"
+                value={credentials.username}
                 autoFocus
                 onChange={handleChange}
               />
@@ -130,6 +139,7 @@ const Login = () => {
                 label="Password"
                 type="password"
                 id="password"
+                value={credentials.password}
                 autoComplete="current-password"
                 onChange={handleChange}
               />
@@ -154,6 +164,24 @@ const Login = () => {
                   </Link>
                 </Grid>
               </Grid>
+              <Stack
+                direction="row"
+                justifyContent="space-around"
+                alignItems="center"
+                spacing={2}
+                p={3}
+              >
+                <Tooltip title="Click to fill in">
+                  <Button variant="contained" onClick={UserSignIn}>
+                    User Demo
+                  </Button>
+                </Tooltip>
+                <Tooltip title="Click to fill in">
+                  <Button variant="contained" onClick={AdminSignIn}>
+                    Admin Demo
+                  </Button>
+                </Tooltip>
+              </Stack>
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>

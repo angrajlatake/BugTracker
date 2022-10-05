@@ -1,5 +1,6 @@
-import { useContext } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { TaskContext, TasksContext } from "../context/TaskContext";
 import {
   Box,
   AppBar,
@@ -22,15 +23,22 @@ import SearchIcon from "@mui/icons-material/Search";
 import React from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ProjectContext } from "../context/ProjectContext";
-
-const settings = ["Logout"];
+import StyledSwitch from "./Switch";
+import theme from "../Styles/theme";
+import { ThemeContext } from "../context/ThemeContext";
+import SearchList from "./SearchList";
 
 const Navbar = () => {
+  const { mode, toggleMode } = useContext(ThemeContext);
   const navigate = useNavigate();
   const { user, dispatch } = useContext(AuthContext);
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
 
+  const { tasks } = useContext(TasksContext);
+  const { dispatch: projectDispatch } = useContext(ProjectContext);
+
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const [query, setQuery] = useState("");
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -48,7 +56,17 @@ const Navbar = () => {
     dispatch({ type: "LOGOUT" });
     navigate("/login");
   };
-  const { setSelectedProject } = useContext(ProjectContext);
+
+  const searchResults = (data) => {
+    const keys = ["title", "desc", "status"];
+
+    if (query.length > 2) {
+      return data.filter((item) =>
+        keys.some((key) => item[key].toLowerCase().includes(query))
+      );
+    }
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -59,32 +77,46 @@ const Navbar = () => {
           <Box
             sx={{ display: "flex", alignItems: "center" }}
             onClick={() => {
-              setSelectedProject(null);
+              projectDispatch({ type: "SELECT_PROJECT", payload: null });
               navigate("/");
             }}
           >
             <AddSharpIcon fontSize="large" />
             <Typography variant="h4">Tasky</Typography>
           </Box>
-          <Paper
-            component="form"
-            sx={{
-              p: "0 4px",
-              display: "flex",
-              alignItems: "center",
-              width: 400,
-            }}
-          >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search"
-              inputProps={{ "aria-label": "search google maps" }}
+          <Box sx={{ position: "relative" }}>
+            <Paper
+              component="form"
+              sx={{
+                p: "0 4px",
+                display: "flex",
+                alignItems: "center",
+                width: 400,
+                position: "relative",
+              }}
+            >
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search"
+                inputProps={{ "aria-label": "Search" }}
+                value={query}
+                onChange={(e) => {
+                  setQuery((prevQuery) => {
+                    return e.target.value;
+                  });
+                }}
+              />
+              <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+                <SearchIcon />
+              </IconButton>
+            </Paper>
+            <SearchList
+              searchResults={searchResults(tasks)}
+              setQuery={setQuery}
             />
-            <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Paper>
+          </Box>
           <Box sx={{ flexGrow: 0 }}>
+            <StyledSwitch onChange={toggleMode} checked={mode === "dark"} />
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt={user.name} src={user.image} />
@@ -106,6 +138,14 @@ const Navbar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
+              <MenuItem
+                onClick={() => {
+                  handleCloseUserMenu();
+                  navigate("/settings");
+                }}
+              >
+                <Typography textAlign="center">Settings</Typography>
+              </MenuItem>
               <MenuItem onClick={handleLogout}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>

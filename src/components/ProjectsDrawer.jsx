@@ -16,10 +16,13 @@ import ListItemText from "@mui/material/ListItemText";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import useFetch from "../hooks/useFetch";
-import SnackError from "./SnackError";
+import SnackError from "./SnackBar/SnackError";
 import NewProjectModal from "./Modal/NewProjectModal";
 import { useNavigate, useParams } from "react-router-dom";
 import { ProjectContext } from "../context/ProjectContext";
+import { setSelectedProject } from "../actions/projects";
+import { getProjects } from "../api/index";
+
 const drawerWidth2 = 240;
 
 const openedMixin = (theme) => ({
@@ -65,14 +68,16 @@ export default function ProjectDrawer() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
-  const { projects, setProjects, selectedProject, setSelectedProject } =
-    useContext(ProjectContext);
+  const { projects, selectedProject, dispatch } = useContext(ProjectContext);
   const params = useParams();
-  const { data, loading, error, reFetch } = useFetch(`projects`);
+
   useEffect(() => {
-    reFetch();
-    setProjects(data);
-  }, [openModal]);
+    const fetchProjects = async () => {
+      const { data } = await getProjects();
+      dispatch({ type: "FETCH_PROJECTS", payload: data });
+    };
+    fetchProjects();
+  }, []);
 
   return (
     <>
@@ -115,28 +120,28 @@ export default function ProjectDrawer() {
                 <ListItemText primary="Add new project" />
               </ListItemButton>
             </ListItem>
-            {loading ? (
-              <CircularProgress />
-            ) : (
+            {projects &&
               projects.map((item, index) => (
                 <ListItem
                   key={item.title}
                   sx={{
                     width: "100%",
+                    "&.Mui-selected": {
+                      backgroundColor: theme.palette.info.main,
+                    },
                   }}
                   disablePadding
+                  selected={
+                    selectedProject && item.title === selectedProject.title
+                  }
                 >
                   <ListItemButton
                     sx={{
                       width: "100%",
                       py: 3,
-                      "&.Mui-selected": {
-                        backgroundColor: theme.palette.info.main,
-                      },
                     }}
-                    selected={item.title === selectedProject}
                     onClick={() => {
-                      setSelectedProject(item.title);
+                      dispatch(setSelectedProject(item));
                       navigate(`/project/${item._id}`);
                     }}
                   >
@@ -149,13 +154,14 @@ export default function ProjectDrawer() {
                     <ListItemText primary={item.title} />
                   </ListItemButton>
                 </ListItem>
-              ))
-            )}
+              ))}
           </List>
         </Box>
       </Drawer>
-      {error && <SnackError error={error.response.data} />}
-      <NewProjectModal openModal={openModal} setOpenModal={setOpenModal} />
+      )
+      {openModal && (
+        <NewProjectModal openModal={openModal} setOpenModal={setOpenModal} />
+      )}
     </>
   );
 }

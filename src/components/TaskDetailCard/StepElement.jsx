@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
@@ -6,44 +6,50 @@ import ReviewsIcon from "@mui/icons-material/Reviews";
 import PropTypes from "prop-types";
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
 import { styled } from "@mui/material/styles";
-import { StepConnector, StepContent } from "@mui/material";
+import { StepConnector, StepContent, Typography } from "@mui/material";
 import { stepConnectorClasses } from "@mui/material/StepConnector";
 
-const steps = [
-  {
-    label: "Start Date",
-    description: `For each ad campaign that you create, you can control how much
-                you're willing to spend on clicks and conversions, which networks
-                and geographical locations you want your ads to show on, and more.`,
-  },
-  {
-    label: "Due Date",
-    date: "An ad group contains one or more ads which target a shared set of keywords.",
-  },
-];
-const StepElement = () => {
-  const [activeStep, setActiveStep] = useState(0);
+const StepElement = ({ startDate, targetDate }) => {
+  startDate = new Date(startDate);
+  targetDate = new Date(targetDate);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const getTimeUsed = (startDate, targetDate) => {
+    const totalDays = parseInt(
+      (targetDate.getTime() - startDate.getTime()) / (24 * 3600 * 1000)
+    );
+    const daysPassed = parseInt(
+      (new Date() - startDate.getTime()) / (24 * 3600 * 1000)
+    );
+    return Math.floor((daysPassed / totalDays) * 100);
   };
+  const timeUsed = getTimeUsed(startDate, targetDate);
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleReset = () => {
-    setActiveStep(0);
-  };
+  const steps = [
+    {
+      label: "Start Date",
+      date: startDate.toDateString(),
+    },
+    {
+      label: "Due Date",
+      date: targetDate.toDateString(),
+    },
+  ];
 
   const StyledConnector = styled(StepConnector)(({ theme }) => ({
     [`& .${stepConnectorClasses.lineVertical}`]: {
       height: "100%",
-      width: 3,
+      width: 10,
       border: 0,
       backgroundColor:
         theme.palette.mode === "dark" ? theme.palette.grey[800] : "#eaeaf0",
-      borderRadius: 1,
+      borderRadius: 16,
+    },
+    [`&.${stepConnectorClasses.active}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        backgroundImage: `linear-gradient( rgb(55, 84, 219) ${timeUsed}%,rgb(246, 248, 253) ${
+          timeUsed + 10
+        }%,rgb(189, 189, 189))`,
+      },
     },
   }));
 
@@ -77,10 +83,10 @@ const StepElement = () => {
 
     return (
       <QontoStepIconRoot ownerState={{ active }} className={className}>
-        {completed ? (
-          <div className="QontoStepIcon-completedIcon" />
-        ) : (
+        {active ? (
           <div className="QontoStepIcon-circle" />
+        ) : (
+          <div className="QontoStepIcon-completedIcon" />
         )}
       </QontoStepIconRoot>
     );
@@ -104,10 +110,20 @@ const StepElement = () => {
       orientation="vertical"
       sx={{ height: "100%" }}
       connector={<StyledConnector />}
+      activeStep={1}
     >
       {steps.map((step, index) => (
         <Step key={index}>
-          <StepLabel StepIconComponent={QontoStepIcon}>{step.label}</StepLabel>
+          <StepLabel
+            StepIconComponent={QontoStepIcon}
+            optional={
+              <Typography component="span" variant="subtitle1" color="initial">
+                {step.date}
+              </Typography>
+            }
+          >
+            {step.label}
+          </StepLabel>
         </Step>
       ))}
     </Stepper>

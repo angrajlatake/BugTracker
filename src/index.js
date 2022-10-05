@@ -5,6 +5,9 @@ import App from "./App";
 import { AuthContextProvider } from "./context/AuthContext";
 import { ProjectContextProvider } from "./context/ProjectContext";
 import { TasksContextProvider } from "./context/TaskContext";
+import { ThemeContextProvider } from "./context/ThemeContext";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./Styles/theme";
 import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -13,7 +16,9 @@ root.render(
     <AuthContextProvider>
       <ProjectContextProvider>
         <TasksContextProvider>
-          <App />
+          <ThemeContextProvider>
+            <App />
+          </ThemeContextProvider>
         </TasksContextProvider>
       </ProjectContextProvider>
     </AuthContextProvider>

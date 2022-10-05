@@ -14,7 +14,7 @@ const TasksPanel = ({ tasks }) => {
       {tasks.map((task, index) => {
         return (
           <Link
-            to={`/Tasks/${task._id}`}
+            to={`/tasks/${task._id}`}
             style={{ textDecoration: "none" }}
             key={index}
           >

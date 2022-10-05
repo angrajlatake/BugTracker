@@ -10,6 +10,7 @@ const SnackError = ({ error }) => {
   };
   const handleSnackOpen = () => {
     if (error) {
+      console.log(error);
       setSnackOpen(true);
       setSnackMessage(error.message);
     }

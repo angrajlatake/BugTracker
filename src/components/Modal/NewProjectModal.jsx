@@ -18,7 +18,7 @@ import add from "date-fns/add";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import SnackError from "../SnackError";
+import SnackError from "../SnackBar/SnackError";
 import axios from "axios";
 
 const NewProjectModal = ({ openModal, setOpenModal }) => {

@@ -1,15 +1,14 @@
 import { useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import useFetch from "../hooks/useFetch";
+import { AuthContext } from "../../context/AuthContext";
+
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TasksPanel from "./TasksPanel";
-import CircularProgress from "@mui/material/CircularProgress";
-import { useParams } from "react-router-dom";
-import { TasksContext } from "../context/TaskContext";
+
+import { TasksContext } from "../../context/TaskContext";
 
 const TasksTabs = () => {
   const [value, setValue] = useState("1");
@@ -17,15 +16,11 @@ const TasksTabs = () => {
     setValue(newValue);
   };
   const { user } = useContext(AuthContext);
-  const [tasks, setTasks] = useContext(TasksContext);
-
-  const params = useParams();
+  const { tasks, dispatch } = useContext(TasksContext);
 
   return (
     <>
-      {!tasks ? (
-        <CircularProgress />
-      ) : (
+      {tasks && (
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example">
@@ -47,6 +42,16 @@ const TasksTabs = () => {
           <TabPanel value="3">
             <TasksPanel
               tasks={tasks.filter((task) => task.status === "progress")}
+            />
+          </TabPanel>
+          <TabPanel value="4">
+            <TasksPanel
+              tasks={tasks.filter((task) => task.status === "review")}
+            />
+          </TabPanel>
+          <TabPanel value="5">
+            <TasksPanel
+              tasks={tasks.filter((task) => task.status === "completed")}
             />
           </TabPanel>
         </TabContext>

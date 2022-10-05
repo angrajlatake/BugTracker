@@ -12,6 +12,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
+import { register } from "../api";
 
 function Copyright(props) {
   return (
@@ -24,7 +25,7 @@ function Copyright(props) {
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
         Tasky
-      </Link>{" "}
+      </Link>
       {new Date().getFullYear()}
       {"."}
     </Typography>
@@ -32,7 +33,7 @@ function Copyright(props) {
 }
 
 const SignUp = () => {
-  const { user, loading, error, dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
   const [confirmPassword, setConfirmPassword] = useState(true);
   const [credentials, setCredentials] = useState({
@@ -53,14 +54,7 @@ const SignUp = () => {
     e.preventDefault();
     dispatch({ type: "LOGIN_START" });
     try {
-      const res = await axios.post(
-        `${process.env.REACT_APP_API_URL}/auth/register`,
-        credentials,
-        {
-          withCredentials: true,
-          credentials: "include",
-        }
-      );
+      const res = await register(credentials);
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
       navigate("/");
     } catch (err) {
@@ -125,7 +119,7 @@ const SignUp = () => {
                 autoComplete="name"
                 autoFocus
                 onChange={handleChange}
-              />{" "}
+              />
               <TextField
                 margin="normal"
                 required
