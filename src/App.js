@@ -57,19 +57,6 @@ function App() {
           <Routes>
             <Route path="login" element={<Login key="comp" />} />
             <Route path="register" element={<SignUp key="comp" />} />
-            {user && !user.isAdmin && (
-              <Route element={<UserRoutes />}>
-                <Route path="/" exact element={<Home />}>
-                  <Route index element={<Overview />} />
-                  <Route path="overview" element={<Overview />} />
-                  <Route path="tasks" element={<Tasks />}>
-                    <Route index element={<TasksTabs />} />
-                    <Route path=":id" element={<TaskDetails />} />
-                  </Route>
-                  <Route path="settings" element={<Settings />} />
-                </Route>
-              </Route>
-            )}
             {user && user.isAdmin && (
               <Route element={<AdminRoutes />}>
                 <Route path="/" exact element={<AdminHome />}>
@@ -90,6 +77,17 @@ function App() {
                 </Route>
               </Route>
             )}
+            <Route element={<UserRoutes />}>
+              <Route path="/" exact element={<Home />}>
+                <Route index element={<Overview />} />
+                <Route path="overview" element={<Overview />} />
+                <Route path="tasks" element={<Tasks />}>
+                  <Route index element={<TasksTabs />} />
+                  <Route path=":id" element={<TaskDetails />} />
+                </Route>
+                <Route path="settings" element={<Settings />} />
+              </Route>
+            </Route>
           </Routes>
         </AnimatePresence>
       </Router>
