@@ -24,6 +24,7 @@ import TaskDetails from "./components/TaskDetailCard/TaskDetails";
 import TasksTabs from "./components/Tasks/TasksTabs";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
 import AdminHome from "./pages/AdminHome";
+import NotFound from "./components/NotFound";
 
 function App() {
   const { user, error } = useContext(AuthContext);
@@ -88,6 +89,7 @@ function App() {
                 <Route path="settings" element={<Settings />} />
               </Route>
             </Route>
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
       </Router>
