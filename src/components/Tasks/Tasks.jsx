@@ -4,6 +4,7 @@ import NewTaskModal from "../Modal/NewTaskModal";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import LinearProgress from "@mui/material/LinearProgress";
 
 import { Outlet, useOutletContext } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -18,6 +19,7 @@ export default function Tasks() {
 
   const handleTabs = useOutletContext();
   const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     handleTabs(1);
@@ -25,6 +27,7 @@ export default function Tasks() {
 
   useEffect(() => {
     const fetchTasks = async () => {
+      setLoading(true);
       if (!tasks) {
         if (selectedProject) {
           const res = await getTasksByProject(selectedProject._id);
@@ -34,6 +37,7 @@ export default function Tasks() {
           dispatch({ type: "FETCH_TASKS", payload: res.data });
         }
       }
+      setLoading(false);
     };
     fetchTasks();
   }, [selectedProject, tasks, dispatch]);
@@ -51,7 +55,7 @@ export default function Tasks() {
             </Button>
           )}
         </Box>
-        <Outlet />
+        {loading ? <LinearProgress /> : <Outlet />}
       </Box>
       {user.isAdmin && (
         <NewTaskModal openModal={openModal} setOpenModal={setOpenModal} />

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import TextField from "@mui/material/TextField";
@@ -44,7 +45,7 @@ const Login = () => {
     password: "",
   });
 
-  const { dispatch } = useContext(AuthContext);
+  const { dispatch, loading } = useContext(AuthContext);
 
   const handleChange = (e) => {
     setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -142,7 +143,8 @@ const Login = () => {
                 autoComplete="current-password"
                 onChange={handleChange}
               />
-              <Button
+              <LoadingButton
+                loading={loading}
                 type="submit"
                 fullWidth
                 variant="contained"
@@ -150,7 +152,7 @@ const Login = () => {
                 onClick={handleLogin}
               >
                 Sign in
-              </Button>
+              </LoadingButton>
               <Grid container>
                 <Grid item xs>
                   <Link href="#" variant="body2">

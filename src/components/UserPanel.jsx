@@ -6,6 +6,7 @@ import TaskCard from "./Tasks/TaskCard";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import LinearProgress from "@mui/material/LinearProgress";
 import DoubleArrowRoundedIcon from "@mui/icons-material/DoubleArrowRounded";
 
 import { getTasksByUser } from "../api";
@@ -44,6 +45,7 @@ const UserPanel = () => {
         >
           Current Tasks <DoubleArrowRoundedIcon />
         </Typography>
+        {!tasks ? <LinearProgress /> : null}
         {tasks && filteredTasks.length > 0 ? (
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
             {filteredTasks.map((filteredTask, index) => (
@@ -72,6 +74,7 @@ const UserPanel = () => {
         >
           Pending Tasks <DoubleArrowRoundedIcon />
         </Typography>
+        {!tasks ? <LinearProgress /> : null}
         {tasks && pendingTasks.length > 0 ? (
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
             {pendingTasks.map((filteredTask, index) => (
