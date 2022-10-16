@@ -1,8 +1,9 @@
-import { createContext, useMemo, useReducer } from "react";
+import { createContext, useEffect, useMemo, useReducer } from "react";
 
 const INITIAL_STATE = {
   projects: null,
-  selectedProject: null,
+  selectedProject:
+    JSON.parse(sessionStorage.getItem("selectedProject")) || null,
 };
 
 export const ProjectContext = createContext(INITIAL_STATE);
@@ -29,6 +30,12 @@ export const ProjectContextProvider = ({ children }) => {
     [state.projects, state.selectedProject]
   );
 
+  useEffect(() => {
+    sessionStorage.setItem(
+      "selectedProject",
+      JSON.stringify(state.selectedProject)
+    );
+  }, [state.selectedProject]);
   return (
     <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>
   );

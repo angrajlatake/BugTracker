@@ -12,7 +12,7 @@ import theme from "../../Styles/theme";
 
 import { ProjectContext } from "../../context/ProjectContext";
 import { TasksContext } from "../../context/TaskContext";
-import { getAllTasks } from "../../api";
+import { getAllTasks, getTasksByProject } from "../../api";
 import { useOutletContext } from "react-router-dom";
 
 const AdminPanel = () => {
@@ -25,9 +25,14 @@ const AdminPanel = () => {
   }, []);
   useEffect(() => {
     const fetchTasks = async () => {
-      if (!selectedProject) {
-        const res = await getAllTasks();
-        taskDispatch({ type: "FETCH_TASKS", payload: res.data });
+      if (!tasks) {
+        if (selectedProject) {
+          const res = await getTasksByProject(selectedProject._id);
+          taskDispatch({ type: "FETCH_TASKS", payload: res.data });
+        } else if (!selectedProject) {
+          const res = await getAllTasks();
+          taskDispatch({ type: "FETCH_TASKS", payload: res.data });
+        }
       }
     };
     fetchTasks();
