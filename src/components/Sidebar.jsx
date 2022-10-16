@@ -57,7 +57,7 @@ const Sidebar = ({ value }) => {
                     width: "100%",
                   }}
                   disablePadding
-                  selected={index === value}
+                  selected={item.title === value}
                   onClick={() => {
                     navigate(
                       `${

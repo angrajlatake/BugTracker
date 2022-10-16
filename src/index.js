@@ -4,6 +4,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { AuthContextProvider } from "./context/AuthContext";
 import { ProjectContextProvider } from "./context/ProjectContext";
+
 import { TasksContextProvider } from "./context/TaskContext";
 import { ThemeContextProvider } from "./context/ThemeContext";
 

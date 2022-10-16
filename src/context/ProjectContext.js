@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useMemo, useReducer } from "react";
 
 const INITIAL_STATE = {
   projects: null,
@@ -20,15 +20,16 @@ const ProjectReducer = (state, action) => {
 
 export const ProjectContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(ProjectReducer, INITIAL_STATE);
+  const value = useMemo(
+    () => ({
+      dispatch,
+      projects: state.projects,
+      selectedProject: state.selectedProject,
+    }),
+    [state.projects, state.selectedProject]
+  );
+
   return (
-    <ProjectContext.Provider
-      value={{
-        dispatch,
-        projects: state.projects,
-        selectedProject: state.selectedProject,
-      }}
-    >
-      {children}
-    </ProjectContext.Provider>
+    <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>
   );
 };

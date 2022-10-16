@@ -16,14 +16,17 @@ const UnAssignedList = ({ unassignedTasks }) => {
         width: "100%",
         maxWidth: 360,
         bgcolor: "background.paper",
+        borderRadius: 1,
       }}
     >
       {unassignedTasks.map((item, index) => {
         return (
-          <Box key={index}>
+          <Box key={item._id}>
+            {index !== 0 && <Divider component="li" />}
             <ListItem
               alignItems="flex-start"
               onClick={() => navigate(`/tasks/${item._id}`)}
+              sx={{ cursor: "pointer" }}
             >
               <ListItemText
                 primary={`Due on ${new Date(item.targetDate).toLocaleDateString(
@@ -40,7 +43,6 @@ const UnAssignedList = ({ unassignedTasks }) => {
                 }
               />
             </ListItem>
-            <Divider component="li" />
           </Box>
         );
       })}

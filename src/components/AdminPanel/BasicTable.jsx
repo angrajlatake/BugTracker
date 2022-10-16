@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 export function BasicTable({ overdueTasks }) {
   const navigate = useNavigate();
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} elevation={3}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
@@ -24,8 +24,11 @@ export function BasicTable({ overdueTasks }) {
           {overdueTasks &&
             overdueTasks.map((row, index) => (
               <TableRow
-                key={index}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                key={row._id}
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  cursor: "pointer",
+                }}
                 onClick={() => navigate(`/tasks/${row._id}`)}
               >
                 <TableCell component="th" scope="row">

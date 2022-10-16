@@ -9,12 +9,12 @@ const Overview = () => {
   const handleChange = useOutletContext();
 
   useEffect(() => {
-    handleChange(0);
+    handleChange("Overview");
   }, []);
 
   return (
     <div>
-      <Typography variant="h4" color="initial">
+      <Typography variant="h4" color="inherit">
         Overview
       </Typography>
       <UserPanel />

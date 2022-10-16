@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -9,59 +9,105 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 
 import IconButton from "@mui/material/IconButton";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import ControlPointRoundedIcon from "@mui/icons-material/ControlPointRounded";
+import CloseIcon from "@mui/icons-material/Close";
+import { createToDo, deleteToDo, getToDo, updateToDo } from "../api";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const Todo = () => {
-  const [todo, setTodo] = useState([
-    { item: "List item1", checked: true },
-    { item: "List item2", checked: false },
-    { item: "List item3", checked: false },
-    { item: "List item3", checked: false },
-  ]);
-  const [newTodo, setNewTodo] = useState(null);
-  const handleToggle = (value) => () => {
-    setTodo([...todo, { item: value.item, checked: true }]);
-  };
+  const { user } = useContext(AuthContext);
+  const [todo, setTodo] = useState(null);
+  const [newTodo, setNewTodo] = useState({
+    todo: "",
+  });
+  useEffect(() => {
+    const fetchTodo = async (user) => {
+      const { data } = await getToDo(user._id);
+      console.log(data);
+      setTodo(data);
+    };
+    fetchTodo(user);
+  }, []);
+
   const handleChange = (e) => {
-    setNewTodo(e.target.value);
+    setNewTodo({ todo: e.target.value });
   };
-  const handleAdd = (e) => {
-    e.preventDefault();
-    setTodo([...todo, { item: newTodo, checked: false }]);
+
+  const handleToggle = async (id, checked) => {
+    const { data } = await updateToDo(id, { checked: !checked });
+    setTodo(data);
+  };
+
+  const handleAdd = async (e) => {
+    const { data } = await createToDo(user._id, newTodo);
+    setTodo(data);
+    setNewTodo({
+      todo: "",
+    });
+  };
+  const handleDelete = async (id) => {
+    const { data } = await deleteToDo(id);
+    setTodo(data);
   };
   return (
     <>
       <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-        {todo.map((value) => {
-          return (
-            <ListItem key={value} disablePadding>
-              <ListItemButton
-                role={undefined}
-                onClick={handleToggle(value)}
-                dense
+        {todo &&
+          todo.map((value, index) => {
+            return (
+              <ListItem
+                key={value._id}
+                disablePadding
+                secondaryAction={
+                  value.checked && (
+                    <IconButton
+                      edge="end"
+                      onClick={() => handleDelete(value._id)}
+                      aria-label="delete"
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  )
+                }
               >
-                <ListItemIcon>
-                  <Checkbox
-                    edge="start"
-                    checked={value.checked}
-                    disableRipple
+                <ListItemButton
+                  role={undefined}
+                  onClick={() => handleToggle(value._id, value.checked)}
+                  dense
+                >
+                  <ListItemIcon>
+                    <Checkbox
+                      edge="start"
+                      checked={value.checked}
+                      disableRipple
+                      icon={<RadioButtonUncheckedIcon />}
+                      checkedIcon={<RadioButtonCheckedIcon />}
+                    />
+                  </ListItemIcon>
+                  <ListItemText
+                    id={value.todo}
+                    primary={value.todo}
+                    sx={{
+                      textDecoration: value.checked ? "line-through" : "none",
+                    }}
                   />
-                </ListItemIcon>
-                <ListItemText id={value.item} primary={value.item} />
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
       </List>
       <Box
         component="form"
         sx={{ display: "flex", width: "100%", alignItems: "center" }}
       >
         <TextField
-          label="Size"
-          id="outlined-size-small"
-          defaultValue=""
           size="small"
+          id="todo"
+          name="todo"
+          value={newTodo.todo}
           sx={{ width: "100%" }}
           onChange={handleChange}
         />

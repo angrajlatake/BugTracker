@@ -10,9 +10,9 @@ import Paper from "@mui/material/Paper";
 import theme from "../Styles/theme";
 
 const Home = () => {
-  const [value, setValue] = useState(0);
+  const [currentView, setCurrentView] = useState(0);
   const handleChange = (newValue) => {
-    setValue(newValue);
+    setCurrentView(newValue);
   };
 
   return (
@@ -21,14 +21,14 @@ const Home = () => {
         component={motion.div}
         sx={{
           display: "flex",
-          backgroundColor: theme.palette.primary.light,
+
           position: "relative",
           minHeight: "100vh",
         }}
       >
         <Navbar />
 
-        <Sidebar handleChange={handleChange} value={value} />
+        <Sidebar handleChange={handleChange} value={currentView} />
         <Box
           component="main"
           sx={{

@@ -62,7 +62,7 @@ const style = {
 
 const ProfileModal = ({ openModal, setOpenModal }) => {
   const { user, dispatch } = useContext(AuthContext);
-  const [image, setImage] = useState(placeholder);
+  const [image, setImage] = useState(user.image || placeholder);
   const [openCropper, setOpenCropper] = useState(false);
   const [croppedImage, setCroppedImage] = useState(null);
   const formData = new FormData();
@@ -89,8 +89,6 @@ const ProfileModal = ({ openModal, setOpenModal }) => {
         credentials: "include",
       })
       .then((res) => {
-        console.log(res.data);
-        console.log(res);
         dispatch({
           type: "UPDATE_USER",
           payload: res.data.user,

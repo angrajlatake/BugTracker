@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import LoadingButton from "@mui/lab/LoadingButton";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
@@ -19,19 +19,23 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import SnackError from "../SnackBar/SnackError";
-import axios from "axios";
-import { useParams } from "react-router-dom";
+
+import { useNavigate, useParams } from "react-router-dom";
+import { postTask } from "../../api";
+import { TasksContext } from "../../context/TaskContext";
 
 const NewTaskModal = ({ openModal, setOpenModal }) => {
   const params = useParams();
-
+  const navigate = useNavigate();
   const { data, error } = useFetch(`user`);
+  const { dispatch } = useContext(TasksContext);
+
   const [formData, setFormData] = useState({
     title: null,
     desc: null,
     startDate: new Date(),
     targetDate: add(new Date(), { months: 1 }),
-    assginedTo: "",
+    assignedTo: "",
   });
   const [postLoading, setPostLoading] = useState(false);
   const handleChange = (e) => {
@@ -44,7 +48,7 @@ const NewTaskModal = ({ openModal, setOpenModal }) => {
     setFormData((prev) => ({ ...prev, targetDate: newValue }));
   };
   const handleSelectChange = (event) => {
-    setFormData((prev) => ({ ...prev, assginedTo: event.target.value }));
+    setFormData((prev) => ({ ...prev, assignedTo: event.target.value }));
   };
   const handleClose = () => setOpenModal(false);
 
@@ -52,17 +56,13 @@ const NewTaskModal = ({ openModal, setOpenModal }) => {
     e.preventDefault();
     setPostLoading(true);
     try {
-      const res = axios.post(
-        `${process.env.REACT_APP_API_URL}/task/${params.id}`,
-        formData,
-        {
-          withCredentials: true,
-          credentials: "include",
-        }
-      );
-      console.log(res);
+      const { data } = await postTask(params.id, formData);
+
+      dispatch({ type: "FETCH_TASKS", payload: data.projectTasks });
       setPostLoading(false);
       handleClose();
+
+      navigate(`/tasks/${data.newTask._id}`);
     } catch (err) {
       console.log(err);
     }
@@ -99,7 +99,7 @@ const NewTaskModal = ({ openModal, setOpenModal }) => {
               onSubmit={handleCreateProject}
             >
               <Stack spacing={3}>
-                <Typography variant="subtitle1" color="initial">
+                <Typography variant="subtitle1" color="inherit">
                   New Task
                 </Typography>
                 <TextField
@@ -151,14 +151,14 @@ const NewTaskModal = ({ openModal, setOpenModal }) => {
                   </InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
-                    id="assginedTo"
-                    value={formData.assginedTo}
+                    id="assignedTo"
+                    value={formData.assignedTo}
                     label="Assigned To"
                     onChange={handleSelectChange}
                   >
                     {data &&
                       data.map((item, index) => (
-                        <MenuItem value={item._id} key={index}>
+                        <MenuItem value={item._id} key={item._id}>
                           <Grid
                             container
                             justifyContent="flex-start"
@@ -170,10 +170,10 @@ const NewTaskModal = ({ openModal, setOpenModal }) => {
                             </Grid>
                             <Grid item>
                               <Stack>
-                                <Typography variant="subtitle1" color="initial">
+                                <Typography variant="subtitle1" color="inherit">
                                   {item.name}
                                 </Typography>
-                                <Typography variant="body" color="initial">
+                                <Typography variant="body" color="inherit">
                                   {item.email}
                                 </Typography>
                               </Stack>
@@ -185,15 +185,15 @@ const NewTaskModal = ({ openModal, setOpenModal }) => {
                 </FormControl>
               </Stack>
               <Box sx={{ position: "relative" }}>
-                <Button
+                <LoadingButton
                   type="submit"
                   fullWidth
                   variant="contained"
-                  disabled={postLoading}
+                  loading={postLoading}
                   sx={{ mt: 3, mb: 2 }}
                 >
                   Create New Task
-                </Button>
+                </LoadingButton>
                 {postLoading && (
                   <CircularProgress
                     size={24}

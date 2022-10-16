@@ -20,7 +20,7 @@ const Messenger = () => {
     <>
       <Grid container sx={{ height: "100%" }}>
         <Grid item xs={12}>
-          <Typography variant="h4" color="initial">
+          <Typography variant="h4" color="inherit">
             Messenger
           </Typography>
         </Grid>

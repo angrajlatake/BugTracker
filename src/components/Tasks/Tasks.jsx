@@ -10,31 +10,34 @@ import { Outlet, useOutletContext } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { ProjectContext } from "../../context/ProjectContext";
 import { TasksContext } from "../../context/TaskContext";
-import { getTasksByProject, getAllTasks } from "../../api";
+import { getTasksByProject, getAllTasks, getTasksByUser } from "../../api";
 
 export default function Tasks() {
   const { user } = useContext(AuthContext);
   const { selectedProject } = useContext(ProjectContext);
   const { tasks, dispatch } = useContext(TasksContext);
 
-  const handleTabs = useOutletContext();
+  const handleChange = useOutletContext();
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    handleTabs(1);
+    handleChange("Tasks");
   }, []);
 
   useEffect(() => {
     const fetchTasks = async () => {
       setLoading(true);
-      if (!tasks) {
+      if (user.isAdmin && !tasks) {
         if (selectedProject) {
           const res = await getTasksByProject(selectedProject._id);
           dispatch({ type: "FETCH_TASKS", payload: res.data });
         } else if (!selectedProject) {
           const res = await getAllTasks();
           dispatch({ type: "FETCH_TASKS", payload: res.data });
+        } else {
+          const { data } = await getTasksByUser(user._id);
+          dispatch({ type: "FETCH_TASKS", payload: data });
         }
       }
       setLoading(false);
@@ -46,7 +49,7 @@ export default function Tasks() {
     <>
       <Box sx={{ width: "100%", typography: "body1", height: "100%" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="h4" color="initial">
+          <Typography variant="h4" color="inherit">
             Tasks
           </Typography>
           {user.isAdmin && selectedProject && (
@@ -57,7 +60,7 @@ export default function Tasks() {
         </Box>
         {loading ? <LinearProgress /> : <Outlet />}
       </Box>
-      {user.isAdmin && (
+      {user.isAdmin && openModal && (
         <NewTaskModal openModal={openModal} setOpenModal={setOpenModal} />
       )}
     </>
