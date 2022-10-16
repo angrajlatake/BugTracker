@@ -116,7 +116,7 @@ const StepElement = ({ startDate, targetDate }) => {
           <StepLabel
             StepIconComponent={QontoStepIcon}
             optional={
-              <Typography component="span" variant="subtitle1" color="initial">
+              <Typography component="span" variant="subtitle1" color="inherit">
                 {step.date}
               </Typography>
             }

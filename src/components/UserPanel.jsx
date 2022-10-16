@@ -7,7 +7,6 @@ import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import LinearProgress from "@mui/material/LinearProgress";
-import DoubleArrowRoundedIcon from "@mui/icons-material/DoubleArrowRounded";
 
 import { getTasksByUser } from "../api";
 import { AuthContext } from "../context/AuthContext";
@@ -19,8 +18,10 @@ const UserPanel = () => {
 
   useEffect(() => {
     const fetchTasksByUser = async () => {
-      const res = await getTasksByUser(user._id);
-      dispatch({ type: "FETCH_TASKS", payload: res.data });
+      if (!tasks) {
+        const { data } = await getTasksByUser(user._id);
+        dispatch({ type: "FETCH_TASKS", payload: data });
+      }
     };
     fetchTasksByUser();
   }, [user._id, dispatch]);
@@ -35,64 +36,64 @@ const UserPanel = () => {
         <Typography variant="h4" color="primary">
           Hi {user.name},
         </Typography>
-        <Typography variant="subtitle1" color="initial">
+        <Typography variant="subtitle1" color="inherit">
           Welcome to Tasky! Your personal Task Management tool.
         </Typography>
         <Typography
           variant="h5"
-          color="initial"
+          color="inherit"
           sx={{ display: "flex", alignItems: "center", gap: 1 }}
         >
-          Current Tasks <DoubleArrowRoundedIcon />
+          Current Tasks
         </Typography>
         {!tasks ? <LinearProgress /> : null}
         {tasks && filteredTasks.length > 0 ? (
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
             {filteredTasks.map((filteredTask, index) => (
               <Link
                 to={`/tasks/${filteredTask._id}`}
                 style={{ textDecoration: "none" }}
-                key={index}
+                key={filteredTask._id}
               >
                 <TaskCard
                   title={filteredTask.title}
-                  desc={filteredTask.desc}
+                  due={filteredTask.targetDate}
                   status={filteredTask.status}
                 />
               </Link>
             ))}
           </Box>
         ) : (
-          <Typography variant="body1" color="initial">
+          <Typography variant="body1" color="inherit">
             None
           </Typography>
         )}
         <Typography
           variant="h5"
-          color="initial"
-          sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          color="inherit"
+          sx={{ display: "flex", alignItems: "center", gap: 1, pt: 2 }}
         >
-          Pending Tasks <DoubleArrowRoundedIcon />
+          Pending Tasks
         </Typography>
         {!tasks ? <LinearProgress /> : null}
         {tasks && pendingTasks.length > 0 ? (
-          <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
             {pendingTasks.map((filteredTask, index) => (
               <Link
                 to={`/tasks/${filteredTask._id}`}
                 style={{ textDecoration: "none" }}
-                key={index}
+                key={filteredTask._id}
               >
                 <TaskCard
                   title={filteredTask.title}
-                  desc={filteredTask.desc}
+                  due={filteredTask.targetDate}
                   status={filteredTask.status}
                 />
               </Link>
             ))}
           </Box>
         ) : (
-          <Typography variant="body1" color="initial">
+          <Typography variant="body1" color="inherit">
             None
           </Typography>
         )}

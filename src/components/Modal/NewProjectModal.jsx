@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 
 import Box from "@mui/material/Box";
@@ -19,16 +19,21 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import SnackError from "../SnackBar/SnackError";
-import axios from "axios";
+import { AuthContext } from "../../context/AuthContext";
+
+import { postProjects } from "../../api";
+import { ProjectContext } from "../../context/ProjectContext";
 
 const NewProjectModal = ({ openModal, setOpenModal }) => {
+  const { user } = useContext(AuthContext);
+  const { dispatch } = useContext(ProjectContext);
   const { data, error } = useFetch(`user/admin`);
   const [formData, setFormData] = useState({
     title: null,
 
     startDate: new Date(),
     targetDate: add(new Date(), { months: 1 }),
-    manager: "",
+    manager: data && user._id,
   });
   const [postLoading, setPostLoading] = useState(false);
   const handleChange = (e) => {
@@ -49,15 +54,8 @@ const NewProjectModal = ({ openModal, setOpenModal }) => {
     e.preventDefault();
     setPostLoading(true);
     try {
-      const res = axios.post(
-        `${process.env.REACT_APP_API_URL}/projects`,
-        formData,
-        {
-          withCredentials: true,
-          credentials: "include",
-        }
-      );
-      console.log(res);
+      const { data } = postProjects(formData);
+      dispatch({ type: "FETCH_PROJECTS", payload: data.projects });
       setPostLoading(false);
       handleClose();
     } catch (err) {
@@ -96,7 +94,7 @@ const NewProjectModal = ({ openModal, setOpenModal }) => {
               onSubmit={handleCreateProject}
             >
               <Stack spacing={3}>
-                <Typography variant="subtitle1" color="initial">
+                <Typography variant="subtitle1" color="inherit">
                   New project
                 </Typography>
                 <TextField
@@ -139,7 +137,7 @@ const NewProjectModal = ({ openModal, setOpenModal }) => {
                   >
                     {data &&
                       data.map((item, index) => (
-                        <MenuItem value={item._id} key={index}>
+                        <MenuItem value={item._id} key={item._id}>
                           <Grid
                             container
                             justifyContent="flex-start"
@@ -151,10 +149,10 @@ const NewProjectModal = ({ openModal, setOpenModal }) => {
                             </Grid>
                             <Grid item>
                               <Stack>
-                                <Typography variant="subtitle1" color="initial">
+                                <Typography variant="subtitle1" color="inherit">
                                   {item.name}
                                 </Typography>
-                                <Typography variant="body" color="initial">
+                                <Typography variant="body" color="inherit">
                                   {item.email}
                                 </Typography>
                               </Stack>

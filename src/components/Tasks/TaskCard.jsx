@@ -4,11 +4,12 @@ import Card from "@mui/material/Card";
 
 import CardContent from "@mui/material/CardContent";
 import Box from "@mui/material/Box";
+import Stack from "@mui/material/Stack";
 import Chip from "@mui/material/Chip";
 
 import Typography from "@mui/material/Typography";
 
-export default function TaskCard({ title, desc, status }) {
+export default function TaskCard({ title, due, status }) {
   const chipColor = (status) => {
     switch (status) {
       case "pending":
@@ -24,7 +25,7 @@ export default function TaskCard({ title, desc, status }) {
     }
   };
   return (
-    <Card sx={{ minWidth: 244, maxWidth: 248, height: 170 }}>
+    <Card sx={{ minWidth: 270, maxWidth: 270, height: 170 }} raised>
       <CardContent
         sx={{
           display: "flex",
@@ -34,14 +35,18 @@ export default function TaskCard({ title, desc, status }) {
         }}
       >
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography variant="subtitle1" color="initial">
-            {title}
-          </Typography>
+          <Box>
+            <Typography component="span" variant="caption" color="inherit">
+              Due
+            </Typography>
+            <Typography variant="subtitle2" color="text.secondary">
+              {new Date(due).toLocaleDateString("en-US")}
+            </Typography>
+          </Box>
           <Chip label={status} color={chipColor(status)} variant="outlined" />
         </Box>
         <Typography
-          variant="h6"
-          color="text.secondary"
+          variant="subtitle1"
           sx={{
             textOverflow: "ellipsis",
             overflow: "hidden",
@@ -49,9 +54,10 @@ export default function TaskCard({ title, desc, status }) {
             display: "-webkit-box",
             WebkitLineClamp: 3,
             WebkitBoxOrient: "vertical",
+            fontSize: 18,
           }}
         >
-          {desc}
+          {title}
         </Typography>
       </CardContent>
     </Card>

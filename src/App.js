@@ -25,9 +25,11 @@ import TasksTabs from "./components/Tasks/TasksTabs";
 import AdminPanel from "./components/AdminPanel/AdminPanel";
 import AdminHome from "./pages/AdminHome";
 import NotFound from "./components/NotFound";
+import SnackError from "./components/SnackBar/SnackError";
 
 function App() {
   const { user, error } = useContext(AuthContext);
+
   const [snackOpen, setSnackOpen] = useState(false);
   const [snackMessage, setSnackMessage] = useState("");
   const handleSnackClose = (e) => {
@@ -106,6 +108,7 @@ function App() {
           {snackMessage}
         </Alert>
       </Snackbar>
+      <SnackError />
     </div>
   );
 }

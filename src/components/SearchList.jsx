@@ -12,7 +12,7 @@ const SearchList = ({ searchResults, setQuery }) => {
   const navigate = useNavigate();
   return (
     <>
-      {searchResults && (
+      {searchResults && searchResults.length > 0 && (
         <Paper
           sx={{
             width: "100%",
@@ -23,10 +23,10 @@ const SearchList = ({ searchResults, setQuery }) => {
           }}
         >
           <List>
-            {searchResults.map((result, index) => {
+            {searchResults.slice(0, 5).map((result, index) => {
               return (
                 <ListItemButton
-                  key={index}
+                  key={result._id}
                   onClick={() => {
                     navigate(`tasks/${result._id}`);
                     setQuery("");

@@ -71,6 +71,9 @@ export const ThemeContextProvider = ({ children }) => {
             '"Segoe UI Symbol"',
           ].join(","),
           fontSize: 14,
+          subtitle1: {
+            lineHeight: 1.35,
+          },
         },
         props: {
           MuiSwitch: {

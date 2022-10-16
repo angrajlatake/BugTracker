@@ -17,8 +17,8 @@ import ListItemText from "@mui/material/ListItemText";
 import NewProjectModal from "./Modal/NewProjectModal";
 import { useNavigate } from "react-router-dom";
 import { ProjectContext } from "../context/ProjectContext";
-import { setSelectedProject } from "../actions/projects";
-import { getProjects } from "../api/index";
+import { getProjects, getTasksByProject } from "../api/index";
+import { TasksContext } from "../context/TaskContext";
 
 const drawerWidth2 = 240;
 
@@ -66,14 +66,23 @@ export default function ProjectDrawer() {
   const [open, setOpen] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const { projects, selectedProject, dispatch } = useContext(ProjectContext);
-
+  const { dispatch: taskDispatch } = useContext(TasksContext);
   useEffect(() => {
     const fetchProjects = async () => {
-      const { data } = await getProjects();
-      dispatch({ type: "FETCH_PROJECTS", payload: data });
+      if (!projects) {
+        const { data } = await getProjects();
+        dispatch({ type: "FETCH_PROJECTS", payload: data });
+      }
     };
     fetchProjects();
   }, []);
+
+  const handleProjectSelect = async (item) => {
+    const res = await getTasksByProject(item._id);
+    taskDispatch({ type: "FETCH_TASKS", payload: res.data });
+    dispatch({ type: "SELECT_PROJECT", payload: item });
+    navigate(`/project/${item._id}`);
+  };
 
   return (
     <>
@@ -137,8 +146,7 @@ export default function ProjectDrawer() {
                       py: 3,
                     }}
                     onClick={() => {
-                      dispatch(setSelectedProject(item));
-                      navigate(`/project/${item._id}`);
+                      handleProjectSelect(item);
                     }}
                   >
                     <ListItemIcon>

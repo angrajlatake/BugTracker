@@ -42,13 +42,13 @@ const NotFound = () => {
             <Typography variant="h2" color="error" sx={{ fontWeight: "bold" }}>
               404
             </Typography>
-            <Typography variant="h3" color="initial">
+            <Typography variant="h3" color="inherit">
               Ooops! You weren't
             </Typography>
-            <Typography variant="h3" color="initial">
+            <Typography variant="h3" color="inherit">
               suppose to see this
             </Typography>
-            <Typography variant="subtitle1" color="initial">
+            <Typography variant="subtitle1" color="inherit">
               Redirecting now...
             </Typography>
             <Box sx={{ width: "100%" }}>

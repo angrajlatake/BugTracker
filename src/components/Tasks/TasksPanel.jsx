@@ -7,7 +7,7 @@ const TasksPanel = ({ tasks }) => {
     <Box
       sx={{
         display: "flex",
-        gap: 1,
+        gap: 3,
         flexWrap: "wrap",
       }}
     >
@@ -16,11 +16,11 @@ const TasksPanel = ({ tasks }) => {
           <Link
             to={`/tasks/${task._id}`}
             style={{ textDecoration: "none" }}
-            key={index}
+            key={task._id}
           >
             <TaskCard
               title={task.title}
-              desc={task.desc}
+              due={task.targetDate}
               status={task.status}
             />
           </Link>

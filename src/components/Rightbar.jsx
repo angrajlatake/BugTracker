@@ -34,6 +34,7 @@ const Rightbar = () => {
             width: 320,
             height: "85vh",
           }}
+          raised
         >
           <CardContent
             sx={{
@@ -55,10 +56,10 @@ const Rightbar = () => {
               }}
               variant="square"
             />
-            <Typography variant="h6" color="initial">
+            <Typography variant="h6" color="inherit">
               {user.username}
             </Typography>
-            <Typography variant="subtitle1" color="initial">
+            <Typography variant="subtitle1" color="inherit">
               {user.email}
             </Typography>
             <Button variant="contained" onClick={handleOpenModal}>

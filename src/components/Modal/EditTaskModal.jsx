@@ -31,7 +31,7 @@ const EditTaskModal = ({ openModal, setOpenModal, task, reFetch }) => {
     desc: task.desc,
     startDate: new Date(task.startingDate),
     targetDate: task.targetDate || add(new Date(), { months: 1 }),
-    assignedTo: "",
+    assignedTo: data && task.assignedTo,
   });
   const [postLoading, setPostLoading] = useState(false);
   const handleChange = (e) => {
@@ -99,7 +99,7 @@ const EditTaskModal = ({ openModal, setOpenModal, task, reFetch }) => {
                 onSubmit={handleCreateProject}
               >
                 <Stack spacing={3}>
-                  <Typography variant="subtitle1" color="initial">
+                  <Typography variant="subtitle1" color="inherit">
                     New Task
                   </Typography>
                   <TextField
@@ -152,42 +152,44 @@ const EditTaskModal = ({ openModal, setOpenModal, task, reFetch }) => {
                       Assigned To
                     </InputLabel>
 
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="assignedTo"
-                      value={formData.assignedTo}
-                      label="Assigned To"
-                      onChange={handleSelectChange}
-                    >
-                      {data &&
-                        data.map((item, index) => (
-                          <MenuItem value={item._id} key={index}>
-                            <Grid
-                              container
-                              justifyContent="flex-start"
-                              alignItems="center"
-                              spacing={2}
-                            >
-                              <Grid item>
-                                <Avatar alt={item.name} src={item.image} />
+                    {data && (
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="assignedTo"
+                        value={formData.assignedTo}
+                        label="Assigned To"
+                        onChange={handleSelectChange}
+                      >
+                        {data &&
+                          data.map((item) => (
+                            <MenuItem value={item._id} key={item._id}>
+                              <Grid
+                                container
+                                justifyContent="flex-start"
+                                alignItems="center"
+                                spacing={2}
+                              >
+                                <Grid item>
+                                  <Avatar alt={item.name} src={item.image} />
+                                </Grid>
+                                <Grid item>
+                                  <Stack>
+                                    <Typography
+                                      variant="subtitle1"
+                                      color="inherit"
+                                    >
+                                      {item.name}
+                                    </Typography>
+                                    <Typography variant="body" color="inherit">
+                                      {item.email}
+                                    </Typography>
+                                  </Stack>
+                                </Grid>
                               </Grid>
-                              <Grid item>
-                                <Stack>
-                                  <Typography
-                                    variant="subtitle1"
-                                    color="initial"
-                                  >
-                                    {item.name}
-                                  </Typography>
-                                  <Typography variant="body" color="initial">
-                                    {item.email}
-                                  </Typography>
-                                </Stack>
-                              </Grid>
-                            </Grid>
-                          </MenuItem>
-                        ))}
-                    </Select>
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    )}
                   </FormControl>
                 </Stack>
                 <Box sx={{ position: "relative" }}>

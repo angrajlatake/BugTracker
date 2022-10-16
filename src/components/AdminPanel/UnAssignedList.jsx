@@ -16,31 +16,48 @@ const UnAssignedList = ({ unassignedTasks }) => {
         width: "100%",
         maxWidth: 360,
         bgcolor: "background.paper",
+        borderRadius: 1,
       }}
     >
       {unassignedTasks.map((item, index) => {
         return (
-          <Box key={index}>
+          <Box key={item._id}>
+            {index !== 0 && <Divider component="li" />}
             <ListItem
               alignItems="flex-start"
               onClick={() => navigate(`/tasks/${item._id}`)}
+              sx={{ cursor: "pointer" }}
             >
               <ListItemText
-                primary={`Due on ${new Date(item.targetDate).toLocaleDateString(
-                  undefined,
-                  { year: "numeric", month: "long", day: "numeric" }
-                )}`}
+                primary={item.title}
+                primaryTypographyProps={{
+                  fontSize: 18,
+                  fontWeight: "medium",
+                  letterSpacing: 0,
+                  mb: 1,
+                }}
                 secondary={
                   <React.Fragment>
-                    <Typography variant="body2" color="text.primary">
-                      {item.title}
+                    <Typography
+                      sx={{ mb: 1 }}
+                      variant="body2"
+                      color="text.primary"
+                    >
+                      {item.desc}
                     </Typography>
-                    {item.desc}
+                    {`Due on ${new Date(item.targetDate).toLocaleDateString(
+                      undefined,
+                      { year: "numeric", month: "long", day: "numeric" }
+                    )}`}
                   </React.Fragment>
                 }
+                secondaryTypographyProps={{
+                  fontSize: 18,
+                  fontWeight: "medium",
+                  mt: 1,
+                }}
               />
             </ListItem>
-            <Divider component="li" />
           </Box>
         );
       })}

@@ -35,6 +35,7 @@ const Navbar = () => {
   const { dispatch: projectDispatch } = useContext(ProjectContext);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [showResults, setShowResults] = useState(false);
   const [query, setQuery] = useState("");
 
   const handleOpenUserMenu = (event) => {
@@ -55,7 +56,7 @@ const Navbar = () => {
   const searchResults = (data) => {
     const keys = ["title", "desc", "status"];
 
-    if (query.length > 2) {
+    if (query.trim().length > 2) {
       return data.filter((item) =>
         keys.some((key) => item[key].toLowerCase().includes(query))
       );
@@ -95,20 +96,29 @@ const Navbar = () => {
                 placeholder="Search"
                 inputProps={{ "aria-label": "Search" }}
                 value={query}
+                onBlur={() => setShowResults(false)}
                 onChange={(e) => {
                   setQuery((prevQuery) => {
                     return e.target.value;
                   });
+                  setShowResults(true);
                 }}
               />
-              <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+              <IconButton
+                type="submit"
+                sx={{ p: "10px" }}
+                aria-label="search"
+                disabled
+              >
                 <SearchIcon />
               </IconButton>
             </Paper>
-            <SearchList
-              searchResults={searchResults(tasks)}
-              setQuery={setQuery}
-            />
+            {showResults && (
+              <SearchList
+                searchResults={searchResults(tasks)}
+                setQuery={setQuery}
+              />
+            )}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <StyledSwitch onChange={toggleMode} checked={mode === "dark"} />

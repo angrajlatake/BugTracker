@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import Avatar from "@mui/material/Avatar";
 
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
+import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import LinearProgress from "@mui/material/LinearProgress";
 import EditTaskModal from "../Modal/EditTaskModal";
 
@@ -18,11 +19,16 @@ import { AuthContext } from "../../context/AuthContext";
 
 import { TasksContext } from "../../context/TaskContext";
 
-import { getUser } from "../../api";
+import { deleteTask, getUser } from "../../api";
+
+import { useNavigate } from "react-router-dom";
+import { ProjectContext } from "../../context/ProjectContext";
 
 const TaskDetailCard = ({ task, reFetch }) => {
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const { dispatch } = useContext(TasksContext);
+  const { projects, selectedProject } = useContext(ProjectContext);
 
   const chipColor = (status) => {
     switch (status) {
@@ -53,15 +59,31 @@ const TaskDetailCard = ({ task, reFetch }) => {
     }
   };
   const [openModal, setOpenModal] = useState(false);
-
-  // const { data, loading, error } = useFetch(
-  //   task.assignedTo ? `user/${task.assignedTo}` : null
-  // );
   const [assignedUser, setAssignedUser] = useState(null);
+
+  const taskProject =
+    selectedProject ||
+    projects.filter((item) => item.tasks.includes(task._id))[0];
   const statusList = ["pending", "progress", "review", "completed"];
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (user.isAdmin && task.assignedTo) {
+        try {
+          const { data } = await getUser(task.assignedTo);
+          setAssignedUser(data);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
+    fetchUser();
+  }, []);
+
   const handleStatusChange = (e) => {
     const newStatus = statusList[statusList.indexOf(task.status) + 1];
     const updatedTask = { ...task, status: newStatus };
+
     axios
       .put(`${process.env.REACT_APP_API_URL}/task/${task._id}`, updatedTask, {
         withCredentials: true,
@@ -83,25 +105,26 @@ const TaskDetailCard = ({ task, reFetch }) => {
         console.log(error);
       });
   };
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (user.isAdmin && task.assignedTo) {
-        try {
-          const { data } = await getUser(task.assignedTo);
-          setAssignedUser(data);
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    };
-    fetchUser();
-  }, []);
+
+  const handleDelete = async () => {
+    try {
+      const { data } = await deleteTask(task._id, taskProject._id);
+
+      await setTimeout(() => {
+        dispatch({ type: "FETCH_TASKS", payload: null });
+      }, 1000);
+      navigate(-1);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <>
       {task === null ? (
         <LinearProgress />
       ) : (
-        <Card sx={{ width: 700, height: 320 }}>
+        <Card sx={{ width: 700, height: 320 }} raised>
           <CardContent
             sx={{
               display: "flex",
@@ -122,7 +145,7 @@ const TaskDetailCard = ({ task, reFetch }) => {
                 position: "relative",
               }}
             >
-              <Typography variant="h5" color="initial">
+              <Typography variant="h5" color="inherit">
                 {task.title}
               </Typography>
               <Chip
@@ -133,7 +156,7 @@ const TaskDetailCard = ({ task, reFetch }) => {
               />
               <Typography
                 variant="body1"
-                color="initial"
+                color="inherit"
                 sx={{ minWidth: "180px" }}
               >
                 {task.desc}
@@ -162,6 +185,13 @@ const TaskDetailCard = ({ task, reFetch }) => {
                       onClick={() => setOpenModal(true)}
                     >
                       <ModeEditRoundedIcon />
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={handleDelete}
+                    >
+                      <DeleteRoundedIcon />
                     </Button>
 
                     {user.isAdmin && assignedUser && (
