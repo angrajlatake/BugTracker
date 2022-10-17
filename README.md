@@ -16,7 +16,7 @@ Tasky is cloud-based platform that allows users to to track issues and manage pr
 
 ## Screenshots
 <div>
-<img src="src/assets/screen1.png" width='400px' alt="screenshot">
+<img src="src/assets/sceen1.png" width='400px' alt="screenshot">
 <img src="src/assets/screen2.png" height='400px' alt="screenshot">
   <img src="src/assets/screen3.png" height='400px' alt="screenshot">
   <img src="src/assets/screen4.png" height='400px' alt="screenshot">
