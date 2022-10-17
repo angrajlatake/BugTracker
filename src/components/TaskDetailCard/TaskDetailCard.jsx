@@ -61,9 +61,10 @@ const TaskDetailCard = ({ task, reFetch }) => {
   const [openModal, setOpenModal] = useState(false);
   const [assignedUser, setAssignedUser] = useState(null);
 
-  const taskProject =
-    selectedProject ||
-    projects.filter((item) => item.tasks.includes(task._id))[0];
+  const taskProject = user.isAdmin
+    ? selectedProject ||
+      projects.filter((item) => item.tasks.includes(task._id))[0]
+    : null;
   const statusList = ["pending", "progress", "review", "completed"];
 
   useEffect(() => {

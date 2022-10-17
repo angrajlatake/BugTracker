@@ -35,10 +35,10 @@ export default function Tasks() {
         } else if (!selectedProject) {
           const res = await getAllTasks();
           dispatch({ type: "FETCH_TASKS", payload: res.data });
-        } else {
-          const { data } = await getTasksByUser(user._id);
-          dispatch({ type: "FETCH_TASKS", payload: data });
         }
+      } else if (!user.isAdmin && !tasks) {
+        const { data } = await getTasksByUser(user._id);
+        dispatch({ type: "FETCH_TASKS", payload: data });
       }
       setLoading(false);
     };
