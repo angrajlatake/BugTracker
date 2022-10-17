@@ -99,7 +99,7 @@ const NewTaskModal = ({ openModal, setOpenModal }) => {
               onSubmit={handleCreateProject}
             >
               <Stack spacing={3}>
-                <Typography variant="subtitle1" color="inherit">
+                <Typography variant="subtitle1" color="text.primary">
                   New Task
                 </Typography>
                 <TextField

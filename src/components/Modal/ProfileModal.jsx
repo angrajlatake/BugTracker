@@ -117,6 +117,7 @@ const ProfileModal = ({ openModal, setOpenModal }) => {
               variant="h6"
               component="h2"
               sx={{ textAlign: "center" }}
+              color="text.primary"
             >
               Upload your Profile Picture
             </Typography>

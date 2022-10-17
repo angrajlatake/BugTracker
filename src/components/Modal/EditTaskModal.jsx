@@ -99,8 +99,8 @@ const EditTaskModal = ({ openModal, setOpenModal, task, reFetch }) => {
                 onSubmit={handleCreateProject}
               >
                 <Stack spacing={3}>
-                  <Typography variant="subtitle1" color="inherit">
-                    New Task
+                  <Typography variant="subtitle1" color="text.primary">
+                    Edit Task
                   </Typography>
                   <TextField
                     margin="normal"

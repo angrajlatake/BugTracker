@@ -62,12 +62,17 @@ const Rightbar = () => {
             <Typography variant="subtitle1" color="inherit">
               {user.email}
             </Typography>
-            <Button variant="contained" onClick={handleOpenModal}>
+            <Button
+              variant="contained"
+              onClick={handleOpenModal}
+              sx={{ mb: 1 }}
+            >
               My profile
             </Button>
             <ButtonGroup
               variant="contained"
               aria-label="outlined primary button group"
+              sx={{ mb: 1 }}
             >
               <Button onClick={() => setCalenderSelected(true)}>
                 Calender

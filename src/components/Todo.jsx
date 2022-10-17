@@ -26,7 +26,7 @@ const Todo = () => {
   useEffect(() => {
     const fetchTodo = async (user) => {
       const { data } = await getToDo(user._id);
-      console.log(data);
+
       setTodo(data);
     };
     fetchTodo(user);
@@ -54,7 +54,14 @@ const Todo = () => {
   };
   return (
     <>
-      <List sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+      <List
+        sx={{
+          width: "100%",
+          maxWidth: 360,
+          bgcolor: "background.paper",
+          borderRadius: 1,
+        }}
+      >
         {todo &&
           todo.map((value, index) => {
             return (
@@ -107,9 +114,16 @@ const Todo = () => {
           size="small"
           id="todo"
           name="todo"
+          placeholder="New To do"
           value={newTodo.todo}
           sx={{ width: "100%" }}
           onChange={handleChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              handleAdd();
+              e.preventDefault();
+            }
+          }}
         />
         <IconButton
           color="primary"
