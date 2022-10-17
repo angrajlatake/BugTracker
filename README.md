@@ -17,15 +17,15 @@ Tasky is cloud-based platform that allows users to to track issues and manage pr
 ## Screenshots
 <div>
 <img src="src/assets/sceen1.png" width='400px' alt="screenshot">
-<img src="src/assets/screen2.png" height='400px' alt="screenshot">
-  <img src="src/assets/screen3.png" height='400px' alt="screenshot">
-  <img src="src/assets/screen4.png" height='400px' alt="screenshot">
-  <img src="src/assets/screen5.png" height='400px' alt="screenshot">
-  <img src="src/assets/screen6.png" height='400px' alt="screenshot">
-  <img src="src/assets/screen7.png" height='400px' alt="screenshot">
-  <img src="src/assets/screen7.png" height='400px' alt="screenshot">
-  <img src="src/assets/screen8.png" height='400px' alt="screenshot">
-  <img src="src/assets/screen9.png" height='400px' alt="screenshot">
+<img src="src/assets/sceen2.png" width='400px' alt="screenshot">
+<img src="src/assets/sceen3.png" width='400px' alt="screenshot">
+<img src="src/assets/sceen4.png" width='400px' alt="screenshot">
+<img src="src/assets/sceen5.png" width='400px' alt="screenshot">
+<img src="src/assets/sceen6.png" width='400px' alt="screenshot">
+<img src="src/assets/sceen7.png" width='400px' alt="screenshot">
+<img src="src/assets/sceen8.png" width='400px' alt="screenshot">
+<img src="src/assets/sceen9.png" width='400px' alt="screenshot">
+
 </div>
 
 
