@@ -17,6 +17,9 @@ import Tooltip from "@mui/material/Tooltip";
 
 // import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+
+import LoginImage from "../images/LoginImage.png";
+
 import { AuthContext } from "../context/AuthContext";
 
 import { useNavigate } from "react-router-dom";
@@ -92,13 +95,9 @@ const Login = () => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: `url(${LoginImage})`,
             backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: "cover",
+            backgroundColor: "primary.main",
             backgroundPosition: "center",
           }}
         />

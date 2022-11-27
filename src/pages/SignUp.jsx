@@ -13,6 +13,8 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 
+import LoginImage from "../images/LoginImage.png";
+
 import { register } from "../api";
 
 function Copyright(props) {
@@ -76,13 +78,9 @@ const SignUp = () => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: "url(https://source.unsplash.com/random)",
+            backgroundImage: `url(${LoginImage})`,
             backgroundRepeat: "no-repeat",
-            backgroundColor: (t) =>
-              t.palette.mode === "light"
-                ? t.palette.grey[50]
-                : t.palette.grey[900],
-            backgroundSize: "cover",
+            backgroundColor: "primary.main",
             backgroundPosition: "center",
           }}
         />
